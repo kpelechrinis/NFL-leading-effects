@@ -1,4 +1,6 @@
 library(nflfastR)
+library(tidyr)
+library(lme4)
 
 pbp <- nflfastR::load_pbp(c(2000:2022))
 
@@ -20,6 +22,10 @@ data.df[which(data.df$ptsscored=="Field goal"),]$pts = 3
 data.df[which(data.df$ptsscored=="Opp touchdown"),]$pts = -6
 data.df[which(data.df$ptsscored=="Safety"),]$pts = -2
 data.df[which(data.df$ptsscored=="Touchdown"),]$pts = 6
+
+tmp = separate(data = data.df, col = off, into = c("o", "season"), sep = "-")
+tmp$o = paste0(tmp$o,"-", tmp$season)
+colnames(tmp)[1]="off"
 
 b = c() #here we will keep the coefficients
 for (y in 2010:2021){
